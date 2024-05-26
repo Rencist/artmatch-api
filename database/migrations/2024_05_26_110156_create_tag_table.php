@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('tag', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('name', 64);
+            $table->string('tag', 64);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

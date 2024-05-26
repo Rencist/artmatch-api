@@ -10,25 +10,22 @@ use Illuminate\Support\Facades\Hash;
 class User
 {
     private UserId $id;
-    private int $role_id;
     private Email $email;
-    private string $name;
+    private string $role;
     private string $hashed_password;
     private static bool $verifier = false;
 
     /**
      * @param UserId $id
-     * @param int $role_id
      * @param Email $email
-     * @param string $name
+     * @param string $role
      * @param string $hashed_password
      */
-    public function __construct(UserId $id, int $role_id, Email $email, string $name, string $hashed_password)
+    public function __construct(UserId $id, Email $email, string $role, string $hashed_password)
     {
         $this->id = $id;
-        $this->role_id = $role_id;
         $this->email = $email;
-        $this->name = $name;
+        $this->role = $role;
         $this->hashed_password = $hashed_password;
     }
 
@@ -61,9 +58,9 @@ class User
         return $this;
     }
 
-    public function checkRoleId(string $role_id): self
+    public function checkRole(string $role): self
     {
-        self::$verifier &= ($this->role_id == $role_id);
+        self::$verifier &= ($this->role == $role);
         return $this;
     }
 
@@ -80,13 +77,12 @@ class User
     /**
      * @throws Exception
      */
-    public static function create(int $role_id, Email $email, string $name, string $unhashed_password): self
+    public static function create(Email $email, string $role, string $unhashed_password): self
     {
         return new self(
             UserId::generate(),
-            $role_id,
             $email,
-            $name,
+            $role,
             Hash::make($unhashed_password)
         );
     }
@@ -108,19 +104,11 @@ class User
     }
 
     /**
-     * @return int
-     */
-    public function getRoleId(): int
-    {
-        return $this->role_id;
-    }
-
-    /**
      * @return string
      */
-    public function getName(): string
+    public function getRole(): string
     {
-        return $this->name;
+        return $this->role;
     }
 
     /**

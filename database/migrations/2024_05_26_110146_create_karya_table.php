@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('karya', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->uuid('user_id')->index();
-            $table->string('name', 128);
+            $table->string('title', 128);
             $table->string('creator', 128);
             $table->string('description', 512);
             $table->string('image', 128);

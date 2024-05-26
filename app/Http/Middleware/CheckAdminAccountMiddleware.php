@@ -38,7 +38,7 @@ class CheckAdminAccountMiddleware
             UserException::throw("admin account could not be decoded", 2056);
         }
         $user = $this->user_repository->find($account->getUserId());
-        $user->beginVerification()->checkRoleId(2)->verify();
+        $user->beginVerification()->checkRole('admin')->verify();
         return $next($request);
     }
 }
