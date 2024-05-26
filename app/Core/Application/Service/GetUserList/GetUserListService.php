@@ -12,15 +12,13 @@ use App\Core\Domain\Repository\UserRepositoryInterface;
 class GetUserListService
 {
     private UserRepositoryInterface $user_repository;
-    private RoleRepositoryInterface $role_repository;
 
     /**
      * @param UserRepositoryInterface $user_repository
      */
-    public function __construct(UserRepositoryInterface $user_repository, RoleRepositoryInterface $role_repository)
+    public function __construct(UserRepositoryInterface $user_repository)
     {
         $this->user_repository = $user_repository;
-        $this->role_repository = $role_repository;
     }
 
     /**
@@ -54,10 +52,8 @@ class GetUserListService
         $max_page = $users_pagination['max_page'];
 
         $user_response = array_map(function (User $user) {
-            $role = $this->role_repository->find($user->getRoleId());
             return new GetUserListResponse(
-                $user,
-                $role->getName()
+                $user
             );
         }, $users_pagination['data']);
 

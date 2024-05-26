@@ -70,7 +70,7 @@ class User
     public function verify(): void
     {
         if (!self::$verifier) {
-            UserException::throw("Username Atau Password Salah", 1003, 401);
+            UserException::throw("invalid email or password", 1003, 401);
         }
     }
 

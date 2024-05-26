@@ -33,12 +33,10 @@ class UserController extends Controller
         $request->validate([
             'email' => 'email|email',
             'password' => 'min:8|max:64|string',
-            'name' => 'min:8|max:128|string',
         ]);
 
         $input = new RegisterUserRequest(
             $request->input('email'),
-            $request->input('name'),
             $request->input('password'),
         );
 

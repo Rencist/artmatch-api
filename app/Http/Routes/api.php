@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
   
 Route::get('hello', function () {
@@ -8,8 +9,8 @@ Route::get('hello', function () {
 });
 
 // User
-Route::post('/create_user', [UserController::class, 'createUser']);
-Route::post('/login_user', [UserController::class, 'loginUser']);
+Route::post('/user', [UserController::class, 'createUser']);
+Route::post('/user/login', [UserController::class, 'loginUser']);
 
 // Forgot Password
 Route::group(['prefix' => '/forgot_password'], function () {
@@ -27,11 +28,13 @@ Route::middleware(['iam'])->group(
         });
 
         //User
-        Route::get('/me', [UserController::class, 'me']);
-        Route::post('/change_password', [UserController::class, 'changePassword']);
+        Route::get('/user/me', [UserController::class, 'me']);
+        // Route::post('/user/change_password', [UserController::class, 'changePassword']);
+        // Route::get('/users', [UserController::class, 'getUserList']);
+        // Route::delete('/users', [UserController::class, 'deleteUser']);
 
-        //User
-        Route::get('/users', [UserController::class, 'getUserList']);
-        Route::delete('/users', [UserController::class, 'deleteUser']);
+        //Tag
+        Route::post('/tags', [TagController::class, 'createTag']);
+        Route::get('/tags', [TagController::class, 'getAllTag']);
     }
 );

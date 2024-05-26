@@ -35,6 +35,35 @@ class SqlTagRepository implements TagRepositoryInterface
     /**
      * @throws Exception
      */
+    public function findByName(string $name): ?Tag
+    {
+        $row = DB::table('tag')->where('tag', $name)->first();
+
+        if (!$row) {
+            return null;
+        }
+
+        return $this->constructFromRows([$row])[0];
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function findAll(): array
+    {
+        $rows = DB::table('tag')->get();
+        
+        $tags = [];
+        foreach ($rows as $row) {
+            $tags[] = $this->constructFromRows([$row])[0];
+        }
+
+        return $tags;
+    }
+
+    /**
+     * @throws Exception
+     */
     public function constructFromRows(array $rows): array
     {
         $tag = [];

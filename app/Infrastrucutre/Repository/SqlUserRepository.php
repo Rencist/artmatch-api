@@ -58,7 +58,7 @@ class SqlUserRepository implements UserRepositoryInterface
         foreach ($rows as $row) {
             $users[] = new User(
                 new UserId($row->id),
-                $row->email,
+                new Email($row->email),
                 $row->role,
                 $row->password
             );

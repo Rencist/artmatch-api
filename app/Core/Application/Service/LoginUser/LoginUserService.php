@@ -32,7 +32,7 @@ class LoginUserService
      */
     public function execute(LoginUserRequest $request): LoginUserResponse
     {
-        $user = $this->user_repository->findByEmail(new Email($request->getEmail()));
+        $user = $this->user_repository->findByEmail($request->getEmail());
         if (!$user) {
             UserException::throw("User Tidak Ditemukan", 1006, 404);
         }

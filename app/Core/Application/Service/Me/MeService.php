@@ -18,26 +18,11 @@ use App\Core\Domain\Repository\RoleHasPermissionRepositoryInterface;
 class MeService
 {
     private UserRepositoryInterface $user_repository;
-    private RoleRepositoryInterface $role_repository;
-    private PermissionRepositoryInterface $permission_repository;
-    private RoleHasPermissionRepositoryInterface $role_has_permission_repository;
 
-    /**
-     * @param UserRepositoryInterface $user_repository
-     * @param RoleRepositoryInterface $role_repository
-     * @param PermissionRepositoryInterface $permission_repository
-     * @param RoleHasPermissionRepositoryInterface $role_has_permission_repository
-     */
     public function __construct(
         UserRepositoryInterface $user_repository,
-        RoleRepositoryInterface $role_repository,
-        PermissionRepositoryInterface $permission_repository,
-        RoleHasPermissionRepositoryInterface $role_has_permission_repository
     ) {
         $this->user_repository = $user_repository;
-        $this->role_repository = $role_repository;
-        $this->permission_repository = $permission_repository;
-        $this->role_has_permission_repository = $role_has_permission_repository;
     }
 
     /**
@@ -46,18 +31,10 @@ class MeService
     public function execute(UserAccount $account): MeResponse
     {
         $user = $this->user_repository->find($account->getUserId());
-        $role = $this->role_repository->find($user->getRoleId());
         if (!$user) {
             UserException::throw("user tidak ditemukan", 1006, 404);
         }
         
-        $name = $this->role_has_permission_repository->findByRoleId($role->getId());
-        $name_array = array_map(function (RoleHasPermission $route) {
-            return new RoutesResponse(
-                $this->permission_repository->find($route->getPermissionId())->getName()
-            );
-        }, $name);
-
-        return new MeResponse($user, $role->getName(), $name_array);
+        return new MeResponse($user);
     }
 }

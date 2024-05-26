@@ -2,7 +2,6 @@
 
 namespace App\Core\Domain\Repository;
 
-use App\Core\Domain\Models\Email;
 use App\Core\Domain\Models\User\User;
 use App\Core\Domain\Models\User\UserId;
 
