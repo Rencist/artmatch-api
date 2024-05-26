@@ -95,7 +95,7 @@ class JwtManager implements JwtManagerInterface
         } catch (UnexpectedValueException $e) {
             UserException::throw('Unexpected JWT format', 907);
         }
-        $user = $this->user_repository->findByEmail(new Email($decoded->email));
+        $user = $this->user_repository->findByEmail($decoded->email);
         if (!$user) {
             UserException::throw("User not found!", 1500);
         }

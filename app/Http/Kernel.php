@@ -89,7 +89,6 @@ class Kernel extends HttpKernel
         'throttle' => ThrottleRequests::class,
         'verified' => EnsureEmailIsVerified::class,
         'iam' => CheckJwtIamMiddleware::class,
-        'admin' => CheckAdminAccountMiddleware::class,
-        'permission' => PermissionMiddleware::class
+        'admin' => CheckAdminAccountMiddleware::class
     ];
 }
