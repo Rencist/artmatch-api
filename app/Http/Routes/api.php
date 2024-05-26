@@ -41,5 +41,6 @@ Route::middleware(['iam'])->group(
         //Karya
         Route::post('/karya', [KaryaController::class, 'createKarya']);
         Route::get('/karya', [KaryaController::class, 'getAllKarya']);
+        Route::get('/karya/{id}', [KaryaController::class, 'getDetailKarya']);
     }
 );

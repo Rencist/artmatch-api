@@ -2,10 +2,13 @@
 
 namespace App\Core\Application\Service\GetAllKarya;
 
-use App\Core\Domain\Repository\KaryaRepositoryInterface;
-use App\Core\Domain\Repository\KaryaTagRepositoryInterface;
 use Exception;
 use App\Core\Domain\Repository\TagRepositoryInterface;
+use App\Core\Domain\Repository\KaryaRepositoryInterface;
+use App\Core\Domain\Repository\KaryaTagRepositoryInterface;
+use App\Core\Application\Service\Pagination\PaginationRequest;
+use App\Core\Application\Service\Pagination\PaginationResponse;
+use App\Core\Application\Service\GetAllKarya\GetAllKaryaResponse;
 
 class GetAllKaryaService
 {
@@ -23,11 +26,19 @@ class GetAllKaryaService
     /**
      * @throws Exception
      */
-    public function execute()
+    public function execute(PaginationRequest $request): PaginationResponse
     {
-        $karyas = $this->karya_repository->findAll();
+        $karyas = $this->karya_repository->getAllWithPagination(
+            $request->getPage(),
+            $request->getPerPage(),
+            $request->getSort(),
+            $request->getDesc(),
+            $request->getSearch(),
+            $request->getFilter()
+        );
+
         $response = [];
-        foreach ($karyas as $karya) {
+        foreach ($karyas['data'] as $karya) {
             $tags = $this->karya_tag_repository->findByKaryaId($karya->getId());
             $tag_response = [];
             foreach ($tags as $tag) {
@@ -43,6 +54,11 @@ class GetAllKaryaService
             );
         }
 
-        return $response;
+        $meta_data = [
+            'page' => $request->getPage(),
+            'max_page' => $karyas["max_page"]
+        ];
+
+        return new PaginationResponse($response, $meta_data);
     }
 }

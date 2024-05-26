@@ -50,6 +50,37 @@ class SqlKaryaRepository implements KaryaRepositoryInterface
         return $karyas;
     }
 
+    public function getAllWithPagination(int $page, int $per_page, ?string $sort, ?bool $desc, ?string $search, ?array $filter): array
+    {
+        $rows = DB::table('karya');
+
+        if ($search) {
+            $rows->where('title', 'like', '%' . $search . '%');
+        }
+
+        if ($filter) {
+            foreach ($filter as $key => $value) {
+                $rows->where($key, $value);
+            }
+        }
+
+        if ($sort) {
+            $rows->orderBy($sort, $desc ? 'desc' : 'asc');
+        }
+
+        $rows = $rows->paginate($per_page, ['*'], 'page', $page);
+
+        $karyas = [];
+        foreach ($rows as $row) {
+            $karyas[] = $this->constructFromRows([$row])[0];
+        }
+
+        return [
+            "data" => $karyas,
+            "max_page" => ceil($rows->total() / $per_page)
+        ];
+    }
+
     /**
      * @throws Exception
      */
