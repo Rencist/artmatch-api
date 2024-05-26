@@ -15,9 +15,8 @@ class SqlUserRepository implements UserRepositoryInterface
     {
         DB::table('users')->upsert([
             'id' => $users->getId()->toString(),
-            'roles_id' => $users->getRoleId(),
             'email' => $users->getEmail()->toString(),
-            'name' => $users->getName(),
+            'role' => $users->getRole(),
             'password' => $users->getHashedPassword()
         ], 'id');
     }
@@ -39,9 +38,9 @@ class SqlUserRepository implements UserRepositoryInterface
     /**
      * @throws Exception
      */
-    public function findByEmail(Email $email): ?User
+    public function findByEmail(string $email): ?User
     {
-        $row = DB::table('users')->where('email', $email->toString())->first();
+        $row = DB::table('users')->where('email', $email)->first();
 
         if (!$row) {
             return null;
@@ -53,29 +52,14 @@ class SqlUserRepository implements UserRepositoryInterface
     /**
      * @throws Exception
      */
-    public function findByRoleId(int $role_id): ?array
-    {
-        $rows = DB::table('users')->where('roles_id', $role_id)->get();
-
-        if (!$rows) {
-            return null;
-        }
-
-        return $this->constructFromRows($rows->all());
-    }
-
-    /**
-     * @throws Exception
-     */
     public function constructFromRows(array $rows): array
     {
         $users = [];
         foreach ($rows as $row) {
             $users[] = new User(
                 new UserId($row->id),
-                $row->roles_id,
-                new Email($row->email),
-                $row->name,
+                $row->email,
+                $row->role,
                 $row->password
             );
         }

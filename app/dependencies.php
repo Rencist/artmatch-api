@@ -21,11 +21,15 @@ use App\Infrastrucutre\Repository\SqlPasswordResetRepository;
 use App\Core\Domain\Repository\SubdistrictRepositoryInterface;
 use App\Core\Domain\Repository\PasswordResetRepositoryInterface;
 use App\Infrastrucutre\Repository\SqlRoleHasPermissionRepository;
-use App\Infrastrucutre\Repository\SqlAccountVerificationRepository;
 use App\Core\Domain\Repository\RoleHasPermissionRepositoryInterface;
-use App\Core\Domain\Repository\AccountVerificationRepositoryInterface;
-
-
+use App\Core\Domain\Repository\KaryaRepositoryInterface;
+use App\Core\Domain\Repository\KaryaTagRepositoryInterface;
+use App\Core\Domain\Repository\SenimanRepositoryInterface;
+use App\Core\Domain\Repository\TagRepositoryInterface;
+use App\Infrastrucutre\Repository\SqlKaryaRepository;
+use App\Infrastrucutre\Repository\SqlKaryaTagRepository;
+use App\Infrastrucutre\Repository\SqlSenimanRepository;
+use App\Infrastrucutre\Repository\SqlTagRepository;
 
 /** @var Application $app */
 
@@ -37,7 +41,10 @@ $app->singleton(VillageRepositoryInterface::class, SqlVillageRepository::class);
 $app->singleton(RoleRepositoryInterface::class, SqlRoleRepository::class);
 $app->singleton(PermissionRepositoryInterface::class, SqlPermissionRepository::class);
 $app->singleton(RoleHasPermissionRepositoryInterface::class, SqlRoleHasPermissionRepository::class);
-$app->singleton(AccountVerificationRepositoryInterface::class, SqlAccountVerificationRepository::class);
 $app->singleton(JwtManagerInterface::class, JwtManager::class);
 $app->singleton(GetIPInterface::class, GetIP::class);
 $app->singleton(PasswordResetRepositoryInterface::class, SqlPasswordResetRepository::class);
+$app->singleton(SenimanRepositoryInterface::class, SqlSenimanRepository::class);
+$app->singleton(KaryaRepositoryInterface::class, SqlKaryaRepository::class);
+$app->singleton(TagRepositoryInterface::class, SqlTagRepository::class);
+$app->singleton(KaryaTagRepositoryInterface::class, SqlKaryaTagRepository::class);
