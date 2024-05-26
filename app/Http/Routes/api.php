@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\KaryaController;
   
 Route::get('hello', function () {
     return response()->json();
@@ -36,5 +37,9 @@ Route::middleware(['iam'])->group(
         //Tag
         Route::post('/tags', [TagController::class, 'createTag']);
         Route::get('/tags', [TagController::class, 'getAllTag']);
+
+        //Karya
+        Route::post('/karya', [KaryaController::class, 'createKarya']);
+        Route::get('/karya', [KaryaController::class, 'getAllKarya']);
     }
 );

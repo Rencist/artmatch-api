@@ -38,6 +38,19 @@ class SqlKaryaTagRepository implements KaryaTagRepositoryInterface
     /**
      * @throws Exception
      */
+    public function findByKaryaId(KaryaId $karya_id): array
+    {
+        $rows = DB::table('karya_tag')->where('karya_id', $karya_id->toString())->get();
+        foreach ($rows as $row) {
+            $karya_tags[] = $this->constructFromRows([$row])[0];
+        }
+
+        return $karya_tags;
+    }
+
+    /**
+     * @throws Exception
+     */
     public function constructFromRows(array $rows): array
     {
         $karya_tags = [];

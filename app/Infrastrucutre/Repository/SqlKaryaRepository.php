@@ -40,6 +40,19 @@ class SqlKaryaRepository implements KaryaRepositoryInterface
     /**
      * @throws Exception
      */
+    public function findAll(): array
+    {
+        $rows = DB::table('karya')->get();
+        foreach ($rows as $row) {
+            $karyas[] = $this->constructFromRows([$row])[0];
+        }
+
+        return $karyas;
+    }
+
+    /**
+     * @throws Exception
+     */
     public function constructFromRows(array $rows): array
     {
         $karyas = [];
