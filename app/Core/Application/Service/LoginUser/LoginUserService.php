@@ -3,7 +3,6 @@
 namespace App\Core\Application\Service\LoginUser;
 
 use Exception;
-use App\Core\Domain\Models\Email;
 use App\Exceptions\UserException;
 use App\Core\Domain\Service\JwtManagerInterface;
 use App\Core\Domain\Repository\UserRepositoryInterface;

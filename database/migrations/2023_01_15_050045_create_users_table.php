@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('email')->index();
             $table->string('password', 64);
             $table->string('role', 64);
+            $table->string('artist_type', 64);
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
         });

@@ -21,9 +21,6 @@ use App\Core\Application\Service\ChangePassword\ChangePasswordRequest;
 use App\Core\Application\Service\ChangePassword\ChangePasswordService;
 use App\Core\Application\Service\ForgotPassword\ForgotPasswordRequest;
 use App\Core\Application\Service\ForgotPassword\ForgotPasswordService;
-use App\Core\Application\Service\UserVerification\UserVerificationRequest;
-use App\Core\Application\Service\UserVerification\UserVerificationService;
-use App\Core\Application\Service\UserVerification\ReUserVerificationRequest;
 use App\Core\Application\Service\ForgotPassword\ChangePasswordRequest as ChangeForgotPasswordRequest;
 
 class UserController extends Controller
@@ -33,11 +30,13 @@ class UserController extends Controller
         $request->validate([
             'email' => 'email|email',
             'password' => 'min:8|max:64|string',
+            'artist_type' => 'string|max:64|in:commercial,personal',
         ]);
 
         $input = new RegisterUserRequest(
             $request->input('email'),
             $request->input('password'),
+            $request->input('artist_type')
         );
 
         DB::beginTransaction();

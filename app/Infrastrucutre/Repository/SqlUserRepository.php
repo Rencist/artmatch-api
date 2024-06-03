@@ -17,6 +17,7 @@ class SqlUserRepository implements UserRepositoryInterface
             'id' => $users->getId()->toString(),
             'email' => $users->getEmail()->toString(),
             'role' => $users->getRole(),
+            'artist_type' => $users->getArtistType(),
             'password' => $users->getHashedPassword()
         ], 'id');
     }
@@ -60,6 +61,7 @@ class SqlUserRepository implements UserRepositoryInterface
                 new UserId($row->id),
                 new Email($row->email),
                 $row->role,
+                $row->artist_type,
                 $row->password
             );
         }

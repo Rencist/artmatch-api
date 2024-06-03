@@ -39,6 +39,7 @@ class RegisterUserService
         $user = User::create(
             new Email($request->getEmail()),
             'user',
+            $request->getArtistType(),
             $request->getPassword()
         );
         $this->user_repository->persist($user);

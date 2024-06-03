@@ -22,6 +22,7 @@ class MeResponse implements JsonSerializable
         $response = [
             'email' => $this->user->getEmail()->toString(),
             'role' => $this->user->getRole(),
+            'artist_type' => $this->user->getArtistType()
         ];
         return $response;
     }

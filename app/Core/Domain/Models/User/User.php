@@ -12,6 +12,7 @@ class User
     private UserId $id;
     private Email $email;
     private string $role;
+    private string $artist_type;
     private string $hashed_password;
     private static bool $verifier = false;
 
@@ -19,13 +20,15 @@ class User
      * @param UserId $id
      * @param Email $email
      * @param string $role
+     * @param string $artist_type
      * @param string $hashed_password
      */
-    public function __construct(UserId $id, Email $email, string $role, string $hashed_password)
+    public function __construct(UserId $id, Email $email, string $role, string $artist_type, string $hashed_password)
     {
         $this->id = $id;
         $this->email = $email;
         $this->role = $role;
+        $this->artist_type = $artist_type;
         $this->hashed_password = $hashed_password;
     }
 
@@ -77,12 +80,13 @@ class User
     /**
      * @throws Exception
      */
-    public static function create(Email $email, string $role, string $unhashed_password): self
+    public static function create(Email $email, string $role, string $artist_type, string $unhashed_password): self
     {
         return new self(
             UserId::generate(),
             $email,
             $role,
+            $artist_type,
             Hash::make($unhashed_password)
         );
     }
@@ -109,6 +113,14 @@ class User
     public function getRole(): string
     {
         return $this->role;
+    }
+
+    /**
+     * @return string
+     */
+    public function getArtistType(): string
+    {
+        return $this->artist_type;
     }
 
     /**
