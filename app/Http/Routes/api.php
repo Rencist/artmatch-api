@@ -42,5 +42,6 @@ Route::middleware(['iam'])->group(
         Route::post('/karya', [KaryaController::class, 'createKarya']);
         Route::get('/karya', [KaryaController::class, 'getAllKarya']);
         Route::get('/karya/{id}', [KaryaController::class, 'getDetailKarya']);
+        Route::delete('/karya/{id}', [KaryaController::class, 'deleteKarya']);
     }
 );

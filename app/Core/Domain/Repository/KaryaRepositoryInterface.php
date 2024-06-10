@@ -13,6 +13,8 @@ interface KaryaRepositoryInterface
 
     public function findAll(): array;
 
+    public function delete(KaryaId $id): void;
+
     public function getAllWithPagination(int $page, int $per_page, ?string $sort, ?bool $desc, ?string $search, ?array $filter): array;
 
     public function constructFromRows(array $rows): array;

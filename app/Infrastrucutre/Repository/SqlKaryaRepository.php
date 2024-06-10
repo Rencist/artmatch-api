@@ -50,6 +50,11 @@ class SqlKaryaRepository implements KaryaRepositoryInterface
         return $karyas;
     }
 
+    public function delete(KaryaId $id): void
+    {
+        DB::table('karya')->where('id', $id->toString())->delete();
+    }
+
     public function getAllWithPagination(int $page, int $per_page, ?string $sort, ?bool $desc, ?string $search, ?array $filter): array
     {
         $rows = DB::table('karya');

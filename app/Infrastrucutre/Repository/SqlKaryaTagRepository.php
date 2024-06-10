@@ -48,6 +48,11 @@ class SqlKaryaTagRepository implements KaryaTagRepositoryInterface
         return $karya_tags;
     }
 
+    public function delete(KaryaId $karya_id): void
+    {
+        DB::table('karya_tag')->where('karya_id', $karya_id->toString())->delete();
+    }
+
     /**
      * @throws Exception
      */

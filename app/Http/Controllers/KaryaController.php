@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Request\PaginationValidateRequest;
 use App\Core\Application\Service\CreateKarya\CreateKaryaRequest;
 use App\Core\Application\Service\CreateKarya\CreateKaryaService;
+use App\Core\Application\Service\DeleteKarya\DeleteKaryaService;
 use App\Core\Application\Service\GetAllKarya\GetAllKaryaService;
 use App\Core\Application\Service\GetDetailKarya\GetDetailKaryaService;
 
@@ -74,5 +75,18 @@ class KaryaController extends Controller
         }
 
         return $this->successWithData($response, "Success get detail karya");
+    }
+
+    public function deleteKarya(DeleteKaryaService $service, string $id)
+    {
+        DB::beginTransaction();
+        try {
+            $service->execute($id);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+
+        return $this->success("Success delete karya");
     }
 }

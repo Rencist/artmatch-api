@@ -13,6 +13,8 @@ interface KaryaTagRepositoryInterface
     public function find(KaryaTagId $id): ?KaryaTag;
 
     public function findByKaryaId(KaryaId $karya_id): array;
+
+    public function delete(KaryaId $karya_id): void;
     
     public function constructFromRows(array $rows): array;
 }
