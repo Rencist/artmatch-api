@@ -26,7 +26,7 @@ class DeleteKaryaService
             throw new UserException("Karya not found", 404);
         }
 
-        $this->karya_repository->delete($karya_id);
         $this->karya_tag_repository->delete($karya_id);
+        $this->karya_repository->delete($karya_id);
     }
 }

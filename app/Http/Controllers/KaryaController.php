@@ -73,7 +73,7 @@ class KaryaController extends Controller
             DB::rollBack();
             throw $e;
         }
-
+        DB::commit();
         return $this->successWithData($response, "Success get detail karya");
     }
 
@@ -86,7 +86,7 @@ class KaryaController extends Controller
             DB::rollBack();
             throw $e;
         }
-
+        DB::commit();
         return $this->success("Success delete karya");
     }
 }
