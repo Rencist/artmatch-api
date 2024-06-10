@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KaryaController;
-  
+
 Route::get('hello', function () {
     return response()->json();
 });
@@ -43,5 +43,6 @@ Route::middleware(['iam'])->group(
         Route::get('/karya', [KaryaController::class, 'getAllKarya']);
         Route::get('/karya/{id}', [KaryaController::class, 'getDetailKarya']);
         Route::delete('/karya/{id}', [KaryaController::class, 'deleteKarya']);
+        Route::get('/model', [KaryaController::class, 'getModel']);
     }
 );

@@ -13,6 +13,7 @@ use App\Core\Application\Service\CreateKarya\CreateKaryaService;
 use App\Core\Application\Service\DeleteKarya\DeleteKaryaService;
 use App\Core\Application\Service\GetAllKarya\GetAllKaryaService;
 use App\Core\Application\Service\GetDetailKarya\GetDetailKaryaService;
+use App\Core\Application\Service\GetModel\GetModelService;
 
 class KaryaController extends Controller
 {
@@ -51,7 +52,7 @@ class KaryaController extends Controller
             $request,
             "title,creator,description"
         );
-        
+
         DB::beginTransaction();
         try {
             $response = $service->execute($input);
@@ -60,7 +61,7 @@ class KaryaController extends Controller
             throw $e;
         }
         DB::commit();
-        
+
         return $this->successWithData($response, "Success get all karya");
     }
 
@@ -88,5 +89,24 @@ class KaryaController extends Controller
         }
         DB::commit();
         return $this->success("Success delete karya");
+    }
+
+    public function getModel(Request $request, GetModelService $service)
+    {
+        $input = PaginationValidateRequest::execute(
+            $request,
+            "title,creator,description"
+        );
+
+        DB::beginTransaction();
+        try {
+            $response = $service->execute($input);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        DB::commit();
+
+        return $this->successWithData($response, "Success get karya model recommendation");
     }
 }
