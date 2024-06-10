@@ -2,6 +2,7 @@
 
 namespace App\Core\Application\Service\DeleteKarya;
 
+use Illuminate\Support\Facades\Http;
 use App\Exceptions\UserException;
 use App\Core\Domain\Models\Karya\KaryaId;
 use App\Core\Domain\Repository\KaryaRepositoryInterface;
@@ -24,6 +25,23 @@ class DeleteKaryaService
         $karya = $this->karya_repository->find($karya_id);
         if (!$karya) {
             throw new UserException("Karya not found", 404);
+        }
+
+        $url = 'https://yotakey-artmarch-recommendation.hf.space/run/predict';
+
+        $data = [
+            'data' => [
+                'delete',
+                $karya->getId()->toString(),
+                'delete',
+                0
+            ]
+        ];
+
+        $response = Http::post($url, $data);
+
+        if (!$response->successful()) {
+            throw new UserException("delete to model error", 1234, 400);
         }
 
         $this->karya_tag_repository->delete($karya_id);

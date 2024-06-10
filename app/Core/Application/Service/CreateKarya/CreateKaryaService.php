@@ -2,6 +2,7 @@
 
 namespace App\Core\Application\Service\CreateKarya;
 
+use Illuminate\Support\Facades\Http;
 use App\Core\Domain\Models\Email;
 use App\Exceptions\UserException;
 use App\Core\Domain\Models\Tag\Tag;
@@ -39,14 +40,37 @@ class CreateKaryaService
             $request->getDescription(),
             $request->getImage()
         );
-        $this->karya_repository->persist($karya);
+        $url = 'https://yotakey-artmarch-recommendation.hf.space/run/predict';
+        $key_karya = $karya->getTitle() . ', oleh ' . $karya->getCreator() . ' , ' . $karya->getDescription() . ', Tag : ';
 
         foreach ($request->getTagId() as $tag_id) {
             $check_tag = $this->tag_repository->find(new TagId($tag_id));
             if (!$check_tag) {
                 UserException::throw("Tag name not found", 1022, 404);
             }
-            $karya_tag = KaryaTag::create($karya_id, $check_tag->getId());
+            $key_karya .= $check_tag->getTag() . ' , ';
+        }
+
+        $data = [
+            'data' => [
+                'add',
+                $karya->getId()->toString(),
+                $key_karya,
+                0
+            ]
+        ];
+
+        $response = Http::post($url, $data);
+
+        if (!$response->successful()) {
+            throw new UserException("add to model error", 1234, 400);
+        }
+
+        $this->karya_repository->persist($karya);
+
+
+        foreach ($request->getTagId() as $tag_id) {
+            $karya_tag = KaryaTag::create($karya_id, new TagId($tag_id));
             $this->karya_tag_repository->persist($karya_tag);
         }
     }

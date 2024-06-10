@@ -2,7 +2,9 @@
 
 namespace App\Core\Application\Service\GetAllKarya;
 
-use Exception;
+use Illuminate\Support\Facades\Http;
+use App\Exceptions\UserException;
+use App\Core\Domain\Models\Karya\KaryaId;
 use App\Core\Domain\Repository\TagRepositoryInterface;
 use App\Core\Domain\Repository\KaryaRepositoryInterface;
 use App\Core\Domain\Repository\KaryaTagRepositoryInterface;
@@ -28,37 +30,97 @@ class GetAllKaryaService
      */
     public function execute(PaginationRequest $request): PaginationResponse
     {
-        $karyas = $this->karya_repository->getAllWithPagination(
-            $request->getPage(),
-            $request->getPerPage(),
-            $request->getSort(),
-            $request->getDesc(),
-            $request->getSearch(),
-            $request->getFilter()
-        );
 
-        $response = [];
-        foreach ($karyas['data'] as $karya) {
-            $tags = $this->karya_tag_repository->findByKaryaId($karya->getId());
-            $tag_response = [];
-            foreach ($tags as $tag) {
-                $tag_response[] = $this->tag_repository->find($tag->getTagId())->getTag();
+        if ($request->getSearch()) {
+            $url = 'https://yotakey-artmarch-recommendation.hf.space/run/predict';
+
+            $data = [
+                'data' => [
+                    'search',
+                    $request->getSearch(),
+                    $request->getSearch(),
+                    $request->getPerPage()
+                ]
+            ];
+
+            $response = Http::post($url, $data);
+
+            if (!$response->successful()) {
+                throw new UserException("search to model error", 1234, 400);
             }
-            $response[] = new GetAllKaryaResponse(
-                $karya->getId()->toString(),
-                $karya->getTitle(),
-                $karya->getCreator(),
-                $karya->getDescription(),
-                $karya->getImage(),
-                $tag_response
+
+            $karyas_id_str = $response->json()['data'][0];
+
+            $karyas_id_str = trim($karyas_id_str, "[]");
+            $karyas_id_str = trim($karyas_id_str, "'");
+
+            $karyas_id = explode("','", $karyas_id_str);
+
+            $karyas_id = array_map(function ($item) {
+                return trim($item, "'");
+            }, $karyas_id);
+
+            $response = [];
+            foreach ($karyas_id as $karya_id) {
+                $karya = $this->karya_repository->find(new KaryaId($karya_id));
+                $tags = $this->karya_tag_repository->findByKaryaId($karya->getId());
+                $tag_response = [];
+                foreach ($tags as $tag) {
+                    $tag_response[] = $this->tag_repository->find($tag->getTagId())->getTag();
+                }
+                $response[] = new GetAllKaryaResponse(
+                    $karya->getId()->toString(),
+                    $karya->getTitle(),
+                    $karya->getCreator(),
+                    $karya->getDescription(),
+                    $karya->getImage(),
+                    $tag_response
+                );
+            }
+
+            $meta_data = [
+                'page' => 1,
+                'max_page' => 1
+            ];
+
+            return new PaginationResponse($response, $meta_data);
+        } else {
+
+            $karyas = $this->karya_repository->getAllWithPagination(
+                $request->getPage(),
+                $request->getPerPage(),
+                $request->getSort(),
+                $request->getDesc(),
+                $request->getSearch(),
+                $request->getFilter()
             );
+
+
+
+
+            $response = [];
+            foreach ($karyas['data'] as $karya) {
+                $tags = $this->karya_tag_repository->findByKaryaId($karya->getId());
+                $tag_response = [];
+                foreach ($tags as $tag) {
+                    $tag_response[] = $this->tag_repository->find($tag->getTagId())->getTag();
+                }
+                $response[] = new GetAllKaryaResponse(
+                    $karya->getId()->toString(),
+                    $karya->getTitle(),
+                    $karya->getCreator(),
+                    $karya->getDescription(),
+                    $karya->getImage(),
+                    $tag_response
+                );
+            }
+
+            $meta_data = [
+                'page' => $request->getPage(),
+                'max_page' => $karyas["max_page"]
+            ];
+
+            return new PaginationResponse($response, $meta_data);
         }
-
-        $meta_data = [
-            'page' => $request->getPage(),
-            'max_page' => $karyas["max_page"]
-        ];
-
-        return new PaginationResponse($response, $meta_data);
     }
 }
