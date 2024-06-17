@@ -11,22 +11,21 @@ class User
 {
     private UserId $id;
     private Email $email;
+    private ?string $phone;
+    private ?string $name;
+    private ?string $preference;
     private string $role;
     private string $artist_type;
     private string $hashed_password;
     private static bool $verifier = false;
 
-    /**
-     * @param UserId $id
-     * @param Email $email
-     * @param string $role
-     * @param string $artist_type
-     * @param string $hashed_password
-     */
-    public function __construct(UserId $id, Email $email, string $role, string $artist_type, string $hashed_password)
+    public function __construct(UserId $id, Email $email, ?string $phone, ?string $name, ?string $preference, string $role, string $artist_type, string $hashed_password)
     {
         $this->id = $id;
         $this->email = $email;
+        $this->phone = $phone;
+        $this->name = $name;
+        $this->preference = $preference;
         $this->role = $role;
         $this->artist_type = $artist_type;
         $this->hashed_password = $hashed_password;
@@ -80,11 +79,14 @@ class User
     /**
      * @throws Exception
      */
-    public static function create(Email $email, string $role, string $artist_type, string $unhashed_password): self
+    public static function create(Email $email, ?string $phone, ?string $name, ?string $preference, string $role, string $artist_type, string $unhashed_password): self
     {
         return new self(
             UserId::generate(),
             $email,
+            $phone,
+            $name,
+            $preference,
             $role,
             $artist_type,
             Hash::make($unhashed_password)
@@ -129,5 +131,29 @@ class User
     public function getHashedPassword(): string
     {
         return $this->hashed_password;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return ?string
+     */
+    public function getPreference(): ?string
+    {
+        return $this->preference;
     }
 }

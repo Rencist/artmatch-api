@@ -15,6 +15,9 @@ return new class extends Migration {
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->string('email')->index();
+            $table->string('phone')->nullable();
+            $table->string('name')->nullable();
+            $table->string('preference')->nullable();
             $table->string('password', 64);
             $table->string('role', 64);
             $table->string('artist_type', 64);

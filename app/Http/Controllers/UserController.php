@@ -13,6 +13,8 @@ use App\Core\Application\Service\LoginUser\LoginUserRequest;
 use App\Core\Application\Service\LoginUser\LoginUserService;
 use App\Core\Application\Service\DeleteUser\DeleteUserRequest;
 use App\Core\Application\Service\DeleteUser\DeleteUserService;
+use App\Core\Application\Service\UpdateUser\UpdateUserRequest;
+use App\Core\Application\Service\UpdateUser\UpdateUserService;
 use App\Core\Application\Service\GetUserList\GetUserListRequest;
 use App\Core\Application\Service\GetUserList\GetUserListService;
 use App\Core\Application\Service\RegisterUser\RegisterUserRequest;
@@ -48,6 +50,28 @@ class UserController extends Controller
         }
         DB::commit();
         return $this->success("Berhasil Registrasi");
+    }
+
+    public function updateUser(Request $request, UpdateUserService $service): JsonResponse
+    {
+        $input = new UpdateUserRequest(
+            $request->input('email'),
+            $request->input('phone'),
+            $request->input('name'),
+            $request->input('preference'),
+            $request->input('password'),
+            $request->input('artist_type')
+        );
+
+        DB::beginTransaction();
+        try {
+            $service->execute($input, $request->get('account'));
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        DB::commit();
+        return $this->success("Berhasil Update User");
     }
 
     /**

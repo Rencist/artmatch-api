@@ -16,6 +16,9 @@ class SqlUserRepository implements UserRepositoryInterface
         DB::table('users')->upsert([
             'id' => $users->getId()->toString(),
             'email' => $users->getEmail()->toString(),
+            'phone' => $users->getPhone(),
+            'name' => $users->getName(),
+            'preference' => $users->getPreference(),
             'role' => $users->getRole(),
             'artist_type' => $users->getArtistType(),
             'password' => $users->getHashedPassword()
@@ -60,6 +63,9 @@ class SqlUserRepository implements UserRepositoryInterface
             $users[] = new User(
                 new UserId($row->id),
                 new Email($row->email),
+                $row->phone ?? null,
+                $row->name ?? null,
+                $row->preference ?? null,
                 $row->role,
                 $row->artist_type,
                 $row->password
