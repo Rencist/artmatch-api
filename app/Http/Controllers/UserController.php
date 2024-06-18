@@ -31,12 +31,18 @@ class UserController extends Controller
     {
         $request->validate([
             'email' => 'email|email',
+            'phone' => 'string|max:16',
+            'name' => 'string|max:128',
+            'preference' => 'string|max:128',
             'password' => 'min:8|max:64|string',
             'artist_type' => 'string|max:64|in:commercial,personal',
         ]);
 
         $input = new RegisterUserRequest(
             $request->input('email'),
+            $request->input('phone'),
+            $request->input('name'),
+            $request->input('preference'),
             $request->input('password'),
             $request->input('artist_type')
         );

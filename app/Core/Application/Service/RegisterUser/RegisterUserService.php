@@ -38,9 +38,9 @@ class RegisterUserService
 
         $user = User::create(
             new Email($request->getEmail()),
-            null,
-            null,
-            null,
+            $request->getPhone(),
+            $request->getName(),
+            $request->getPreference(),
             'user',
             $request->getArtistType(),
             $request->getPassword()
