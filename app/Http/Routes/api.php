@@ -19,6 +19,11 @@ Route::group(['prefix' => '/forgot_password'], function () {
     Route::post('/change', [UserController::class, 'changeForgotPassword']);
 });
 
+// Karya
+Route::get('/karya', [KaryaController::class, 'getAllKarya']);
+Route::get('/karya/{id}', [KaryaController::class, 'getDetailKarya']);
+Route::get('/model', [KaryaController::class, 'getModel']);
+
 Route::middleware(['iam'])->group(
     function () {
         Route::get('test', function () {
@@ -41,9 +46,6 @@ Route::middleware(['iam'])->group(
 
         //Karya
         Route::post('/karya', [KaryaController::class, 'createKarya']);
-        Route::get('/karya', [KaryaController::class, 'getAllKarya']);
-        Route::get('/karya/{id}', [KaryaController::class, 'getDetailKarya']);
         Route::delete('/karya/{id}', [KaryaController::class, 'deleteKarya']);
-        Route::get('/model', [KaryaController::class, 'getModel']);
     }
 );
