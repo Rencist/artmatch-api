@@ -44,9 +44,10 @@ class CreateKaryaService
         $key_karya = $karya->getTitle() . ', oleh ' . $karya->getCreator() . ' , ' . $karya->getDescription() . ', Tag : ';
 
         foreach ($request->getTagId() as $tag_id) {
-            $check_tag = $this->tag_repository->find(new TagId($tag_id));
+            $check_tag = $this->tag_repository->findByName($tag_id);
             if (!$check_tag) {
-                UserException::throw("Tag name not found", 1022, 404);
+                $check_tag = Tag::create($tag_id);
+                $this->tag_repository->persist($check_tag);
             }
             $key_karya .= $check_tag->getTag() . ' , ';
         }
@@ -70,7 +71,8 @@ class CreateKaryaService
 
 
         foreach ($request->getTagId() as $tag_id) {
-            $karya_tag = KaryaTag::create($karya_id, new TagId($tag_id));
+            $tag_insert = $this->tag_repository->findByName($tag_id);
+            $karya_tag = KaryaTag::create($karya_id, $tag_insert->getId());
             $this->karya_tag_repository->persist($karya_tag);
         }
     }
