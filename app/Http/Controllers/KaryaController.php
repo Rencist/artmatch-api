@@ -28,6 +28,7 @@ class KaryaController extends Controller
             'tag_id.*' => 'distinct',
         ]);
 
+
         $input = new CreateKaryaRequest(
             $request->input('title'),
             $request->input('creator'),
@@ -97,6 +98,7 @@ class KaryaController extends Controller
             $request,
             "title,creator,description"
         );
+
 
         DB::beginTransaction();
         try {

@@ -50,10 +50,11 @@ class GetModelService
 
         $karyas_id_str = $response->json()['data'][0];
 
-        $karyas_id_str = trim($karyas_id_str, "[]");
-        $karyas_id_str = trim($karyas_id_str, "'");
+        $karyas_id_str = str_replace(['[', ']', "'", ' '], '', $karyas_id_str);
+        $karyas_id_str = trim($karyas_id_str);
 
-        $karyas_id = explode("','", $karyas_id_str);
+
+        $karyas_id = explode(",", $karyas_id_str);
 
         $karyas_id = array_map(function ($item) {
             return trim($item, "'");
@@ -62,6 +63,9 @@ class GetModelService
         $response = [];
         foreach ($karyas_id as $karya_id) {
             $karya = $this->karya_repository->find(new KaryaId($karya_id));
+            if (!$karya) {
+                continue;
+            }
             $tags = $this->karya_tag_repository->findByKaryaId($karya->getId());
             $tag_response = [];
             foreach ($tags as $tag) {
