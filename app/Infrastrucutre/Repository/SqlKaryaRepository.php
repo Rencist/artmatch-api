@@ -20,6 +20,7 @@ class SqlKaryaRepository implements KaryaRepositoryInterface
             'creator' => $karyas->getCreator(),
             'description' => $karyas->getDescription(),
             'image' => $karyas->getImage(),
+            'count' => $karyas->getCount() ?? 0
         ], 'id');
     }
 
@@ -99,7 +100,8 @@ class SqlKaryaRepository implements KaryaRepositoryInterface
                 $row->title,
                 $row->creator,
                 $row->description,
-                $row->image
+                $row->image,
+                $row->count
             );
         }
         return $karyas;

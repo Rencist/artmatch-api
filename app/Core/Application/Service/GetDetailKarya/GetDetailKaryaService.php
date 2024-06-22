@@ -3,13 +3,12 @@
 namespace App\Core\Application\Service\GetDetailKarya;
 
 use Exception;
+use App\Exceptions\UserException;
+use App\Core\Domain\Models\Karya\KaryaId;
 use App\Core\Domain\Repository\TagRepositoryInterface;
 use App\Core\Domain\Repository\KaryaRepositoryInterface;
 use App\Core\Domain\Repository\KaryaTagRepositoryInterface;
-use App\Core\Application\Service\Pagination\PaginationRequest;
-use App\Core\Application\Service\Pagination\PaginationResponse;
 use App\Core\Application\Service\GetDetailKarya\GetDetailKaryaResponse;
-use App\Core\Domain\Models\Karya\KaryaId;
 
 class GetDetailKaryaService
 {
@@ -31,6 +30,9 @@ class GetDetailKaryaService
     {
         $karya = $this->karya_repository->find(new KaryaId($id));
 
+        if (!$karya) {
+            throw new UserException("Karya not found", 404);
+        }
         $tags = $this->karya_tag_repository->findByKaryaId($karya->getId());
         $tag_response = [];
         foreach ($tags as $tag) {
@@ -42,6 +44,7 @@ class GetDetailKaryaService
             $karya->getCreator(),
             $karya->getDescription(),
             $karya->getImage(),
+            $karya->getCount(),
             $tag_response
         );
 

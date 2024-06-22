@@ -23,6 +23,7 @@ Route::group(['prefix' => '/forgot_password'], function () {
 Route::get('/karya', [KaryaController::class, 'getAllKarya']);
 Route::get('/karya/{id}', [KaryaController::class, 'getDetailKarya']);
 Route::get('/model', [KaryaController::class, 'getModel']);
+Route::post('/karya/add_count/{id}', [KaryaController::class, 'addCount']);
 
 Route::middleware(['iam'])->group(
     function () {

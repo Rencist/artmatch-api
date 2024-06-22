@@ -38,7 +38,8 @@ class CreateKaryaService
             $request->getTitle(),
             $request->getCreator(),
             $request->getDescription(),
-            $request->getImage()
+            $request->getImage(),
+            0
         );
         $url = 'https://yotakey-artmarch-recommendation.hf.space/run/predict';
         $key_karya = $karya->getTitle() . ', oleh ' . $karya->getCreator() . ' , ' . $karya->getDescription() . ', Tag : ';

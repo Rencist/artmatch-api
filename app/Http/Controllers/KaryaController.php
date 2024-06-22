@@ -7,13 +7,14 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Core\Application\Service\GetModel\GetModelService;
 use App\Http\Controllers\Request\PaginationValidateRequest;
 use App\Core\Application\Service\CreateKarya\CreateKaryaRequest;
 use App\Core\Application\Service\CreateKarya\CreateKaryaService;
 use App\Core\Application\Service\DeleteKarya\DeleteKaryaService;
 use App\Core\Application\Service\GetAllKarya\GetAllKaryaService;
+use App\Core\Application\Service\AddCountKarya\AddCountKaryaService;
 use App\Core\Application\Service\GetDetailKarya\GetDetailKaryaService;
-use App\Core\Application\Service\GetModel\GetModelService;
 
 class KaryaController extends Controller
 {
@@ -77,6 +78,19 @@ class KaryaController extends Controller
         }
         DB::commit();
         return $this->successWithData($response, "Success get detail karya");
+    }
+
+    public function addCount(AddCountKaryaService $service, string $id)
+    {
+        DB::beginTransaction();
+        try {
+            $service->execute($id);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        DB::commit();
+        return $this->success("Success add count karya");
     }
 
     public function deleteKarya(DeleteKaryaService $service, string $id)
