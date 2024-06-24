@@ -77,6 +77,7 @@ class GetModelService
                 $karya->getCreator(),
                 $karya->getDescription(),
                 $karya->getImage(),
+                $karya->getCount(),
                 $tag_response
             );
         }
