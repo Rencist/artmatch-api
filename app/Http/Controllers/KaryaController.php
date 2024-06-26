@@ -22,7 +22,7 @@ class KaryaController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'creator' => 'required|string|max:255',
+            // 'creator' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'image' => 'required|string|max:255',
             'tag_id' => 'required|array',
@@ -32,7 +32,7 @@ class KaryaController extends Controller
 
         $input = new CreateKaryaRequest(
             $request->input('title'),
-            $request->input('creator'),
+            // $request->input('creator'),
             $request->input('description'),
             $request->input('image'),
             $request->input('tag_id')
