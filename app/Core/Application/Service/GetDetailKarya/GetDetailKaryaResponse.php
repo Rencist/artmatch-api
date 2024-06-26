@@ -12,9 +12,10 @@ class GetDetailKaryaResponse implements JsonSerializable
     private string $description;
     private string $image;
     private string $count;
+    private string $phone_number;
     private array $tag;
 
-    public function __construct(string $id, string $title, string $creator, string $description, string $image, string $count, array $tag)
+    public function __construct(string $id, string $title, string $creator, string $description, string $image, string $count, string $phone_number, array $tag)
     {
         $this->id = $id;
         $this->title = $title;
@@ -22,6 +23,7 @@ class GetDetailKaryaResponse implements JsonSerializable
         $this->description = $description;
         $this->image = $image;
         $this->count = $count;
+        $this->phone_number = $phone_number;
         $this->tag = $tag;
     }
 
@@ -34,6 +36,7 @@ class GetDetailKaryaResponse implements JsonSerializable
             'description' => $this->description,
             'image' => $this->image,
             'count' => $this->count,
+            'phone_number' => $this->phone_number,
             'tag' => $this->tag,
         ];
     }
