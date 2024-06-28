@@ -87,6 +87,16 @@ class SqlKaryaRepository implements KaryaRepositoryInterface
         ];
     }
 
+    public function findByUserId(UserId $user_id): array
+    {
+        $rows = DB::table('karya')->where('user_id', $user_id->toString())->get();
+        foreach ($rows as $row) {
+            $karyas[] = $this->constructFromRows([$row])[0];
+        }
+
+        return $karyas;
+    }
+
     /**
      * @throws Exception
      */

@@ -25,6 +25,8 @@ Route::get('/karya/{id}', [KaryaController::class, 'getDetailKarya']);
 Route::get('/model', [KaryaController::class, 'getModel']);
 Route::post('/karya/add_count/{id}', [KaryaController::class, 'addCount']);
 
+Route::get('/karya/creator/{id}', [KaryaController::class, 'getKaryaByCreator']);
+
 Route::middleware(['iam'])->group(
     function () {
         Route::get('test', function () {

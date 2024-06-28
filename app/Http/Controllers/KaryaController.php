@@ -57,7 +57,7 @@ class KaryaController extends Controller
 
         DB::beginTransaction();
         try {
-            $response = $service->execute($input);
+            $response = $service->execute($input, null);
         } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
@@ -124,5 +124,19 @@ class KaryaController extends Controller
         DB::commit();
 
         return $this->successWithData($response, "Success get karya model recommendation");
+    }
+
+    public function getKaryaByCreator(GetAllKaryaService $service, string $id)
+    {
+        DB::beginTransaction();
+        try {
+            $response = $service->execute(null, $id);
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        DB::commit();
+
+        return $this->successWithData($response, "Success get karya by creator");
     }
 }
