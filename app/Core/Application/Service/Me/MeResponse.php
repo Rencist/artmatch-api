@@ -20,6 +20,7 @@ class MeResponse implements JsonSerializable
     public function jsonSerialize(): array
     {
         $response = [
+            'id' => $this->user->getId()->toString(),
             'email' => $this->user->getEmail()->toString(),
             'phone' => $this->user->getPhone(),
             'name' => $this->user->getName(),
