@@ -109,4 +109,12 @@ class Form
     {
         return $this->price;
     }
+
+    /**
+     * @return void
+     */
+    public function setStatus(FormStatus $status): void
+    {
+        $this->status = $status;
+    }
 }

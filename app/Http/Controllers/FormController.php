@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Core\Application\Service\CreateForm\CreateFormRequest;
 use App\Core\Application\Service\CreateForm\CreateFormService;
 use App\Core\Application\Service\GetDetailForm\GetDetailFormService;
+use App\Core\Application\Service\ChangeStatusForm\ChangeStatusFormService;
 
 class FormController extends Controller
 {
@@ -64,5 +65,18 @@ class FormController extends Controller
     {
         $form = $service->executeAll();
         return $this->successWithData($form, "Success all offering form");
+    }
+
+    public function changeStatusForm(Request $request, ChangeStatusFormService $service, $id): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            $service->execute($id, $request->get('status'));
+        } catch (Throwable $e) {
+            DB::rollBack();
+            throw $e;
+        }
+        DB::commit();
+        return $this->success("Success change form status");
     }
 }

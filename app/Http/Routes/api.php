@@ -51,5 +51,6 @@ Route::middleware(['iam'])->group(
         Route::get('/form/offered', [FormController::class, 'getFormOffered']);
         Route::get('/form/offering', [FormController::class, 'getFormOffering']);
         Route::get('/form/detail/{id}', [FormController::class, 'getDetailForm']);
+        Route::patch('/form/status/{id}', [FormController::class, 'changeStatusForm']);
     }
 );
