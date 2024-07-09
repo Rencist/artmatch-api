@@ -57,6 +57,12 @@ class FormController extends Controller
     public function getFormOffering(Request $request, GetDetailFormService $service): JsonResponse
     {
         $form = $service->executeOffering($request->get('account'));
-        return $this->successWithData($form, "Success get detail offering form");
+        return $this->successWithData($form, "Success get offering form");
+    }
+
+    public function getAllForm(GetDetailFormService $service): JsonResponse
+    {
+        $form = $service->executeAll();
+        return $this->successWithData($form, "Success all offering form");
     }
 }

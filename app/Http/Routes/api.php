@@ -47,6 +47,7 @@ Route::middleware(['iam'])->group(
 
         //Form
         Route::post('/form', [FormController::class, 'createForm']);
+        Route::get('/form', [FormController::class, 'getAllForm']);
         Route::get('/form/offered', [FormController::class, 'getFormOffered']);
         Route::get('/form/offering', [FormController::class, 'getFormOffering']);
         Route::get('/form/detail/{id}', [FormController::class, 'getDetailForm']);

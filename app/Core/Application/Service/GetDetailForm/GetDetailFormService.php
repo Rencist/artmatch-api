@@ -98,4 +98,29 @@ class GetDetailFormService
         
         return $form_resp;
     }
+
+    public function executeAll(): array
+    {
+        $form = $this->form_repository->findAll();
+
+        $form_resp = [];
+        foreach ($form as $f) {
+            $userFrom = $this->user_repository->find($f->getUserIdFrom());
+            if (!$userFrom) {
+                throw new UserException("User not found", 404);
+            }
+            $userTo = $this->user_repository->find($f->getUserIdTo());
+            if (!$userTo) {
+                throw new UserException("User not found", 404);
+            }
+
+            $form_resp[] = new GetDetailFormResponse(
+                $f,
+                $userFrom,
+                $userTo
+            );
+        }
+        
+        return $form_resp;
+    }
 }
