@@ -61,6 +61,7 @@ class SqlFormRepository implements FormRepositoryInterface
     public function findByUserFromId(UserId $user_id): array
     {
         $rows = DB::table('form')->where('user_id_from', $user_id->toString())->get();
+        $forms = [];
         foreach ($rows as $row) {
             $forms[] = $this->constructFromRows([$row])[0];
         }
@@ -71,6 +72,7 @@ class SqlFormRepository implements FormRepositoryInterface
     public function findByUserToId(UserId $user_id): array
     {
         $rows = DB::table('form')->where('user_id_to', $user_id->toString())->get();
+        $forms = [];
         foreach ($rows as $row) {
             $forms[] = $this->constructFromRows([$row])[0];
         }
