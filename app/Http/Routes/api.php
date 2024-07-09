@@ -47,5 +47,6 @@ Route::middleware(['iam'])->group(
 
         //Form
         Route::post('/form', [FormController::class, 'createForm']);
+        Route::get('/form/{id}', [FormController::class, 'getDetailForm']);
     }
 );

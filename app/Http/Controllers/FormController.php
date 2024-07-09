@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Core\Application\Service\CreateForm\CreateFormRequest;
 use App\Core\Application\Service\CreateForm\CreateFormService;
+use App\Core\Application\Service\GetDetailForm\GetDetailFormService;
 
 class FormController extends Controller
 {
@@ -39,5 +40,11 @@ class FormController extends Controller
         }
         DB::commit();
         return $this->success("Success create form");
+    }
+
+    public function getDetailForm(GetDetailFormService $service, $id): JsonResponse
+    {
+        $form = $service->execute($id);
+        return $this->successWithData($form, "Success get detail form");
     }
 }
