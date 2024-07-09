@@ -1,0 +1,24 @@
+name: Deploy Backend
+on:
+    workflow_dispatch:
+    push:
+        branches:
+            - main
+jobs:
+    build:
+        name: Deploy Backend
+        runs-on: ubuntu-latest
+        steps:
+            - name: Connect to server
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.SSH_HOST }}
+                  username: ${{ secrets.SSH_USERNAME }}
+                  password: ${{ secrets.SSH_PASSWORD }}
+                  port: 22
+                  script: |
+                      cd /var/www/artmatch-api
+                      git stash
+                      git pull --rebase
+                      php artisan migrate
+                      service nginx restart
