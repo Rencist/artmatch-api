@@ -19,6 +19,7 @@ return new class extends Migration
             $table->uuid('user_id_to')->index();
             $table->string('title', 128);
             $table->string('bank_account', 128);
+            $table->string('bank_type', 128);
             $table->string('status', 128);
             $table->float('price');
             $table->timestamp('created_at')->useCurrent();

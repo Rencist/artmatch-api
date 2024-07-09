@@ -19,7 +19,8 @@ class SqlFormRepository implements FormRepositoryInterface
             'user_id_from' => $forms->getUserIdFrom()->toString(),
             'user_id_to' => $forms->getUserIdTo()->toString(),
             'title' => $forms->getTitle(),
-            'back_account' => $forms->getBackAccount(),
+            'bank_account' => $forms->getBankAccount(),
+            'bank_type' => $forms->getBankType(),
             'status' => $forms->getStatus()->value,
             'price' => $forms->getPrice()
         ], 'id');
@@ -89,7 +90,8 @@ class SqlFormRepository implements FormRepositoryInterface
                 new UserId($row->user_id_from),
                 new UserId($row->user_id_to),
                 $row->title,
-                $row->back_account,
+                $row->bank_account,
+                $row->bank_type,
                 FormStatus::from($row->status),
                 $row->price
             );

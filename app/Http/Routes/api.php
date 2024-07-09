@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\FormController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KaryaController;
 
@@ -29,13 +30,6 @@ Route::get('/karya/creator/{id}', [KaryaController::class, 'getKaryaByCreator'])
 
 Route::middleware(['iam'])->group(
     function () {
-        Route::get('test', function () {
-            return response()->json([
-                "success" => true,
-                "message" => "User Berhasil Mengakses Endpoint Ini"
-            ]);
-        });
-
         //User
         Route::patch('/user', [UserController::class, 'updateUser']);
         Route::get('/user/me', [UserController::class, 'me']);
@@ -50,5 +44,8 @@ Route::middleware(['iam'])->group(
         //Karya
         Route::post('/karya', [KaryaController::class, 'createKarya']);
         Route::delete('/karya/{id}', [KaryaController::class, 'deleteKarya']);
+
+        //Form
+        Route::post('/form', [FormController::class, 'createForm']);
     }
 );
