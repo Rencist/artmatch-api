@@ -15,7 +15,7 @@ interface UserRepositoryInterface
 
     public function findByEmail(string $email): ?User;
 
-    public function getWithPagination(int $page, int $per_page): array;
+    public function getWithPagination(int $page, int $per_page, ?string $sort, ?bool $desc, ?string $search, ?array $filter): array;
 
     public function constructFromRows(array $rows): array;
 }

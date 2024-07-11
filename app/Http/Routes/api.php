@@ -34,7 +34,7 @@ Route::middleware(['iam'])->group(
         Route::patch('/user', [UserController::class, 'updateUser']);
         Route::get('/user/me', [UserController::class, 'me']);
         // Route::post('/user/change_password', [UserController::class, 'changePassword']);
-        // Route::get('/users', [UserController::class, 'getUserList']);
+        Route::get('/user', [UserController::class, 'getUserList']);
         // Route::delete('/users', [UserController::class, 'deleteUser']);
 
         //Tag

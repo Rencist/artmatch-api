@@ -53,6 +53,37 @@ class SqlUserRepository implements UserRepositoryInterface
         return $this->constructFromRows([$row])[0];
     }
 
+    public function getWithPagination(int $page, int $per_page, ?string $sort, ?bool $desc, ?string $search, ?array $filter): array
+    {
+        $rows = DB::table('users');
+
+        if ($search) {
+            $rows->where('nama', 'like', '%' . $search . '%');
+        }
+
+        if ($filter) {
+            foreach ($filter as $key => $value) {
+                $rows->where($key, $value);
+            }
+        }
+
+        if ($sort) {
+            $rows->orderBy($sort, $desc ? 'desc' : 'asc');
+        }
+
+        $rows = $rows->paginate($per_page, ['*'], 'page', $page);
+
+        $karyas = [];
+        foreach ($rows as $row) {
+            $karyas[] = $this->constructFromRows([$row])[0];
+        }
+
+        return [
+            "data" => $karyas,
+            "max_page" => ceil($rows->total() / $per_page)
+        ];
+    }
+
     /**
      * @throws Exception
      */
@@ -72,21 +103,6 @@ class SqlUserRepository implements UserRepositoryInterface
             );
         }
         return $users;
-    }
-
-    public function getWithPagination(int $page, int $per_page): array
-    {
-        $rows = DB::table('users')
-            ->paginate($per_page, ['*'], 'user_page', $page);
-        $users = [];
-
-        foreach ($rows as $row) {
-            $users[] = $this->constructFromRows([$row])[0];
-        }
-        return [
-            "data" => $users,
-            "max_page" => ceil($rows->total() / $per_page)
-        ];
     }
 
     public function delete(UserId $id): void

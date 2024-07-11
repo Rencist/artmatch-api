@@ -9,6 +9,7 @@ use App\Core\Domain\Models\Email;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Core\Application\Service\Me\MeService;
+use App\Http\Controllers\Request\PaginationValidateRequest;
 use App\Core\Application\Service\LoginUser\LoginUserRequest;
 use App\Core\Application\Service\LoginUser\LoginUserService;
 use App\Core\Application\Service\DeleteUser\DeleteUserRequest;
@@ -104,13 +105,9 @@ class UserController extends Controller
 
     public function getUserList(Request $request, GetUserListService $service): JsonResponse
     {
-        $input = new GetUserListRequest(
-            $request->input('page'),
-            $request->input('per_page'),
-            $request->input('sort'),
-            $request->input('type'),
-            $request->input('filter'),
-            $request->input('search')
+        $input = PaginationValidateRequest::execute(
+            $request,
+            "name,email"
         );
 
         $response = $service->execute($input);
