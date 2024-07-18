@@ -31,7 +31,7 @@ class SqlFormRepository implements FormRepositoryInterface
      */
     public function find(FormId $id): ?Form
     {
-        $row = DB::table('form')->where('id', $id->toString())->first();
+        $row = DB::table('form')->where('id', $id->toString())->orderBy('updated_at')->first();
 
         if (!$row) {
             return null;
@@ -45,7 +45,7 @@ class SqlFormRepository implements FormRepositoryInterface
      */
     public function findAll(): array
     {
-        $rows = DB::table('form')->get();
+        $rows = DB::table('form')->orderBy('updated_at')->get();
         foreach ($rows as $row) {
             $forms[] = $this->constructFromRows([$row])[0];
         }
@@ -60,7 +60,7 @@ class SqlFormRepository implements FormRepositoryInterface
 
     public function findByUserFromId(UserId $user_id): array
     {
-        $rows = DB::table('form')->where('user_id_from', $user_id->toString())->get();
+        $rows = DB::table('form')->where('user_id_from', $user_id->toString())->orderBy('updated_at')->get();
         $forms = [];
         foreach ($rows as $row) {
             $forms[] = $this->constructFromRows([$row])[0];
@@ -71,7 +71,7 @@ class SqlFormRepository implements FormRepositoryInterface
 
     public function findByUserToId(UserId $user_id): array
     {
-        $rows = DB::table('form')->where('user_id_to', $user_id->toString())->get();
+        $rows = DB::table('form')->where('user_id_to', $user_id->toString())->orderBy('updated_at')->get();
         $forms = [];
         foreach ($rows as $row) {
             $forms[] = $this->constructFromRows([$row])[0];
