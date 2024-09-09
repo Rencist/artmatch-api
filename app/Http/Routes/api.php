@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FormController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\KaryaController;
@@ -52,5 +53,8 @@ Route::middleware(['iam'])->group(
         Route::get('/form/offering', [FormController::class, 'getFormOffering']);
         Route::get('/form/detail/{id}', [FormController::class, 'getDetailForm']);
         Route::patch('/form/status/{id}', [FormController::class, 'changeStatusForm']);
+
+        //Chat
+        Route::post('/chat', [ChatController::class, 'createChat']);
     }
 );
