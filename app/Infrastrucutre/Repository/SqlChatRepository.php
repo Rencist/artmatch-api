@@ -36,6 +36,38 @@ class SqlChatRepository implements ChatRepositoryInterface
         return $this->constructFromRows([$row])[0];
     }
 
+    public function findMyChat(UserId $id): array
+    {
+        $rows = DB::select("
+        select
+            aa.*,
+            u.name,
+            u.email
+        from
+            (
+            select
+                c.message,
+                c.created_at,
+                case
+                    when c.user_id_from = ? then 'ngirim'
+                    else 'nerima'
+                end as user_action,
+                case
+                    when c.user_id_from = ? then c.user_id_to
+                    else c.user_id_from
+                end as user_lawan
+            from
+                chat c
+            order by
+                c.created_at desc
+        ) aa
+        join users u on
+            aa.user_lawan = u.id
+        ", [$id->toString(), $id->toString()]);
+
+        return $rows;
+    }
+
     /**
      * @throws Exception
      */

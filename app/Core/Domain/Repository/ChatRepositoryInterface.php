@@ -10,4 +10,6 @@ interface ChatRepositoryInterface
     public function persist(Chat $Chat): void;
 
     public function findByUserId(UserId $id): ?array;
+
+    public function findMyChat(UserId $id): array;
 }

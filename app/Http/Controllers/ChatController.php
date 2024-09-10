@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Core\Application\Service\GetChat\GetChatService;
 use App\Core\Application\Service\CreateChat\CreateChatRequest;
 use App\Core\Application\Service\CreateChat\CreateChatService;
 
@@ -33,5 +34,11 @@ class ChatController extends Controller
         }
         DB::commit();
         return $this->success("Success create chat");
+    }
+
+    public function getMyChat(Request $request, GetChatService $service): JsonResponse
+    {
+        $chat = $service->executeMyChat($request->get('account'));
+        return $this->successWithData($chat, "Success get my chat");
     }
 }

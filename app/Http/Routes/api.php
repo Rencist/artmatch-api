@@ -56,5 +56,6 @@ Route::middleware(['iam'])->group(
 
         //Chat
         Route::post('/chat', [ChatController::class, 'createChat']);
+        Route::get('/chat', [ChatController::class, 'getMyChat']);
     }
 );
