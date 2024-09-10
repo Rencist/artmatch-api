@@ -48,6 +48,7 @@ class SqlChatRepository implements ChatRepositoryInterface
             select
                 c.message,
                 c.created_at,
+                c.is_watched,
                 case
                     when c.user_id_from = ? then 'ngirim'
                     else 'nerima'

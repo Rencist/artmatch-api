@@ -32,6 +32,7 @@ class GetChatService
                     'user_email' => $item->email,
                     'message' => $item->message,
                     'action' => $item->user_action,
+                    'is_watched' => $item->is_watched,
                     'created_at' => $item->created_at,
                 ];
             })->sortBy('created_at')->values();
