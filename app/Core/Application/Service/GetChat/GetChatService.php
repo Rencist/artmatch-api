@@ -2,6 +2,7 @@
 
 namespace App\Core\Application\Service\GetChat;
 
+use App\Core\Domain\Models\User\UserId;
 use App\Exceptions\UserException;
 use App\Core\Domain\Models\UserAccount;
 use App\Core\Domain\Repository\ChatRepositoryInterface;
@@ -22,6 +23,35 @@ class GetChatService
     {
         $chat = $this->chat_repository->findMyChat($account->getUserId());
 
+        $collection = collect($chat);
+
+        $grouped = $collection->groupBy('user_lawan')->map(function ($group) {
+            return $group->map(function ($item) {
+                return [
+                    'user_id' => $item->user_lawan,
+                    'user_name' => $item->name,
+                    'user_email' => $item->email,
+                    'message' => $item->message,
+                    'action' => $item->user_action,
+                    'is_watched' => $item->is_watched,
+                    'created_at' => $item->created_at,
+                ];
+            })->sortBy('created_at')->values();
+        });
+
+        $response = $grouped->sortByDesc(function ($items) {
+            return $items->first()['created_at'];
+        })->toArray();
+
+        return $response;
+    }
+
+    public function executeUserChat(UserAccount $account, string $user_id): array
+    {
+        $this->chat_repository->updateIswatched($account->getUserId(), new UserId($user_id));
+        
+        $chat = $this->chat_repository->findUserChat($account->getUserId(), new UserId($user_id));
+        
         $collection = collect($chat);
 
         $grouped = $collection->groupBy('user_lawan')->map(function ($group) {

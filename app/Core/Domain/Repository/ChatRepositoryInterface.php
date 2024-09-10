@@ -12,4 +12,8 @@ interface ChatRepositoryInterface
     public function findByUserId(UserId $id): ?array;
 
     public function findMyChat(UserId $id): array;
+
+    public function findUserChat(UserId $id, UserId $user_id): array;
+
+    public function updateIswatched(UserId $id, UserId $user_id): void;
 }

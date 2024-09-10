@@ -41,4 +41,10 @@ class ChatController extends Controller
         $chat = $service->executeMyChat($request->get('account'));
         return $this->successWithData($chat, "Success get my chat");
     }
+
+    public function getUserChat(Request $request, GetChatService $service, string $user_id): JsonResponse
+    {
+        $chat = $service->executeUserChat($request->get('account'), $user_id);
+        return $this->successWithData($chat, "Success get my chat");
+    }
 }

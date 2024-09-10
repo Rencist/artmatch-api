@@ -69,6 +69,57 @@ class SqlChatRepository implements ChatRepositoryInterface
         return $rows;
     }
 
+    public function findUserChat(UserId $id, UserId $user_id): array
+    {
+        $rows = DB::select("
+        select
+            aa.*,
+            u.name,
+            u.email
+        from
+            (
+            SELECT
+                c.message,
+                c.created_at,
+                c.is_watched,
+                CASE
+                    WHEN c.user_id_from = ? THEN 'ngirim'
+                    ELSE 'nerima'
+                END AS user_action,
+                CASE
+                    WHEN c.user_id_from = ? THEN c.user_id_to
+                    ELSE c.user_id_from
+                END AS user_lawan
+            FROM
+                chat c
+            WHERE
+                (c.user_id_from = ? OR c.user_id_to = ?)
+            ORDER BY
+                c.created_at DESC
+        ) aa
+        join users u on
+            aa.user_lawan = u.id
+        ", [$id->toString(), $id->toString(), $user_id->toString(), $user_id->toString()]);
+
+        return $rows;
+    }
+
+    public function updateIswatched(UserId $id, UserId $user_id): void
+    {
+        $user_id_login = $id->toString();
+        $user_lawan_id = $user_id->toString();
+        DB::table('chat')
+            ->where(function ($query) use ($user_id_login) {
+                $query->where('user_id_from', $user_id_login)
+                    ->orWhere('user_id_to', $user_id_login);
+            })
+            ->where(function ($query) use ($user_lawan_id) {
+                $query->where('user_id_from', $user_lawan_id)
+                    ->orWhere('user_id_to', $user_lawan_id);
+            })
+            ->update(['is_watched' => 1]);
+    }
+
     /**
      * @throws Exception
      */
